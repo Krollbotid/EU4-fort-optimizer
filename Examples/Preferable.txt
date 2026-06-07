@@ -1,0 +1,31 @@
+# Bal Mire
+229
+# North Citadel
+840
+#province_group = white_walls
+746
+747
+754
+755
+756
+828
+829
+830
+837
+850
+855
+860
+862
+865
+866
+869
+873
+874
+# Marrhold
+4097
+
+# Optional - don't paste if not going to use!
+# Bal Dostan
+441
+# Khugdihr
+2863

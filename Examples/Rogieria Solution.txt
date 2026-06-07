@@ -1,0 +1,43 @@
+Selected forts:
+229 (Bal_Mire) (mandatory)
+358 (Coldrest) (exceptional)
+725 (Entalenham) (mandatory)
+728 (Sumacarn) 
+732 (Gerudswatch) (exceptional)
+743 (Nortwood) 
+748 (Acenvror) 
+756 (Silvervord) (preferred)
+762 (Mireleigh) (from group)
+765 (Tiltwick) (from group)
+771 (Halansar) 
+780 (Valefort) 
+785 (Moreced) 
+794 (Oudmerewood) 
+799 (Catelsvord) 
+803 (Dostans_Way) (exceptional)
+811 (Clovenwood) 
+822 (Haresleigh) 
+829 (Silverdocks) (preferred)
+839 (Elderlan) 
+847 (Glory_Road) 
+853 (Foarhal) 
+856 (Forkwic) 
+859 (Charwic) 
+861 (Alloysford) 
+865 (Ardent_Keep) (preferred)
+877 (Boggartstead) 
+881 (Ordham) 
+886 (Widnath) 
+890 (Nymphlea) 
+895 (Griffonsgate) 
+4097 (Marrhold) (preferred)
+
+Total forts: 32
+
+Group constraints:
+Falsemire: 1 of 1 selected (vertices: 762)
+Adenica: 1 of 1 selected (vertices: 765)
+Silvervord: 1 of 1 selected (vertices: 756)
+
+Neighbor fort mode: allow only in preferred (purple) vertices
+
