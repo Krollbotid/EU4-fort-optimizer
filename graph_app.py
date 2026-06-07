@@ -618,7 +618,7 @@ class GraphApp:
     
     def optimize_coverage(self):
         if not PULP_AVAILABLE:
-            messagebox.showerror("Ошибка", i18n.get('pulp_not_installed'))
+            messagebox.showerror(i18n.get('error_title'), i18n.get('pulp_not_installed'))
             return
         
         if self.current_G is None:
@@ -644,7 +644,7 @@ class GraphApp:
         
         missing_purple = purple_raw - all_vertices
         if missing_purple:
-            messagebox.showwarning("Предупреждение", f"Некоторые фиолетовые вершины не найдены: {', '.join(missing_purple)}")
+            messagebox.showwarning(i18n.get('warning_title'), i18n.get('warning_purple_not_found', vertices=", ".join(missing_purple)))
             purple = {v for v in purple_raw if v in all_vertices}
         
         all_group_vertices = set()
@@ -672,7 +672,7 @@ class GraphApp:
             forts, _ = self.solve_with_pulp(vertices, edges, mandatory, preferred, purple,
                                             group_constraints, self.neighbor_constraint_mode.get())
         except Exception as e:
-            messagebox.showerror("Ошибка", f"Не удалось решить задачу ILP:\n{str(e)}")
+            messagebox.showerror(i18n.get('error_title'), i18n.get('error_solving_ilp', error=str(e)))
             return
         
         if forts is None:
@@ -686,7 +686,7 @@ class GraphApp:
             covered_vertices |= neighbors.get(f, set())
         
         self.update_coverage_result(forts, mandatory, preferred, purple, covered_vertices, group_constraints)
-        messagebox.showinfo("Решение", f"Найдено оптимальное покрытие. Крепостей: {len(forts)}")
+        messagebox.showinfo(i18n.get('info_title'), i18n.get('solution_found', count=len(forts)))
     
     # ------------------ Ручная проверка покрытия ------------------
     def manual_check_coverage(self):
@@ -746,7 +746,7 @@ class GraphApp:
         mandatory = self.parse_vertex_list_flexible(self.mandatory_text.get("1.0", tk.END))
         missing_mandatory = mandatory - forts
         if missing_mandatory:
-            errors.append(f"Не установлены обязательные крепости: {', '.join(sorted(missing_mandatory))}")
+            errors.append(i18n.get('missing_mandatory_forts', vertices=", ".join(sorted(missing_mandatory))))
 
         group_constraints = self.parse_group_constraints(self.group_text.get("1.0", tk.END))
         for name, vertices, min_cnt in group_constraints:

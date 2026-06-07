@@ -39,7 +39,6 @@
   "neighbor_violation": "Mandatory forts violate neighbor restrictions.\nPlease change mandatory list or choose another neighbor mode.",
   "large_graph": "Large Graph",
   "large_graph_msg": "Graph has {n} vertices. Exact search may take a long time.\nUse greedy (approximate) algorithm?",
-  "greedy_fail": "Greedy algorithm failed to cover all vertices with constraints.",
   "group_fail": "Cannot satisfy group constraints with current neighbor restrictions.\nTry changing exceptional list or neighbor mode.",
   "exact_fail": "Failed to find covering satisfying all constraints.",
   "greedy_solution": "Approximate Solution",
@@ -67,5 +66,13 @@
   "error_missing_vertices": "Missing vertices in graph: {vertices}",
   "error_group_not_satisfied": "Group constraint '{name}' not satisfied: required {required}, selected {selected} (needed: {needed_vertices})",
   "error_neighbor_violation": "Neighbor restriction violated between {v} and {u}",
-  "error_not_covered": "Uncovered vertices: {vertices}"
+  "error_not_covered": "Uncovered vertices: {vertices}",
+  "pulp_not_installed": "PuLP library is not installed. Install it with: pip install pulp",
+  "warning_purple_not_found": "Some purple vertices not found: {vertices}",
+  "error_solving_ilp": "Failed to solve ILP problem:\n{error}",
+  "solution_found": "Optimal coverage found. Forts: {count}",
+  "missing_mandatory_forts": "Missing mandatory forts: {vertices}",
+  "warning_title": "Warning",
+  "error_title": "Error",
+  "info_title": "Solution"
 }
