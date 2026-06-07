@@ -8,7 +8,6 @@ import json
 import os
 from itertools import combinations
 
-# Импорт PuLP с обработкой ошибки
 try:
     import pulp
     PULP_AVAILABLE = True
@@ -54,19 +53,19 @@ class GraphApp:
         
         # ---- Конфигурация графа ----
         self.graph_frame = tk.LabelFrame(left_pane, text=i18n.get('graph_config'), font=("Arial", 10, "bold"))
-        left_pane.add(self.graph_frame, height=170)
+        left_pane.add(self.graph_frame, height=140)
         self.text_area = scrolledtext.ScrolledText(self.graph_frame, wrap=tk.WORD, font=("Consolas", 10))
         self.text_area.pack(fill=tk.BOTH, expand=True)
         
         # ---- Словарь имён ----
         self.names_frame = tk.LabelFrame(left_pane, text=i18n.get('names_dict'), font=("Arial", 10, "bold"))
-        left_pane.add(self.names_frame, height=90)
+        left_pane.add(self.names_frame, height=80)
         self.names_area = scrolledtext.ScrolledText(self.names_frame, wrap=tk.WORD, font=("Consolas", 10))
         self.names_area.pack(fill=tk.BOTH, expand=True)
         
         # ---- Панель управления ----
         control_frame = tk.Frame(left_pane)
-        left_pane.add(control_frame, height=50)
+        left_pane.add(control_frame, height=45)
         self.apply_btn = tk.Button(control_frame, text=i18n.get('apply_btn'), command=self.apply_configuration,
                                    font=("Arial", 10, "bold"), bg="#e0e0e0")
         self.apply_btn.pack(side=tk.LEFT, padx=(0, 10))
@@ -82,32 +81,32 @@ class GraphApp:
         
         # ---- Обязательные ----
         self.mandatory_frame = tk.LabelFrame(left_pane, text=i18n.get('mandatory'), font=("Arial", 10, "bold"))
-        left_pane.add(self.mandatory_frame, height=80)
+        left_pane.add(self.mandatory_frame, height=70)
         self.mandatory_text = scrolledtext.ScrolledText(self.mandatory_frame, wrap=tk.WORD, font=("Consolas", 10))
         self.mandatory_text.pack(fill=tk.BOTH, expand=True)
         
         # ---- Желательные ----
         self.preferred_frame = tk.LabelFrame(left_pane, text=i18n.get('preferred'), font=("Arial", 10, "bold"))
-        left_pane.add(self.preferred_frame, height=80)
+        left_pane.add(self.preferred_frame, height=70)
         self.preferred_text = scrolledtext.ScrolledText(self.preferred_frame, wrap=tk.WORD, font=("Consolas", 10))
         self.preferred_text.pack(fill=tk.BOTH, expand=True)
         
         # ---- Исключительные ----
         self.purple_frame = tk.LabelFrame(left_pane, text=i18n.get('purple'), font=("Arial", 10, "bold"))
-        left_pane.add(self.purple_frame, height=80)
+        left_pane.add(self.purple_frame, height=70)
         self.purple_text = scrolledtext.ScrolledText(self.purple_frame, wrap=tk.WORD, font=("Consolas", 10))
         self.purple_text.pack(fill=tk.BOTH, expand=True)
         
         # ---- Групповые ограничения ----
         self.group_frame = tk.LabelFrame(left_pane, text=i18n.get('group_constraints'), font=("Arial", 10, "bold"))
-        left_pane.add(self.group_frame, height=100)
+        left_pane.add(self.group_frame, height=90)
         self.group_text = scrolledtext.ScrolledText(self.group_frame, wrap=tk.WORD, font=("Consolas", 10))
         self.group_text.pack(fill=tk.BOTH, expand=True)
         self.group_text.insert(tk.END, "# Пример:\n# Falsemire: 762,761,759 : 1\n")
         
         # ---- Ограничения соседних крепостей ----
         self.constraint_frame = tk.LabelFrame(left_pane, text=i18n.get('neighbor_constraints'), font=("Arial", 10, "bold"))
-        left_pane.add(self.constraint_frame, height=80)
+        left_pane.add(self.constraint_frame, height=85)
         self.radio_none = tk.Radiobutton(self.constraint_frame, text=i18n.get('neighbor_none'),
                                          variable=self.neighbor_constraint_mode, value=0, font=("Arial", 9))
         self.radio_none.pack(anchor=tk.W)
@@ -118,15 +117,12 @@ class GraphApp:
                                         variable=self.neighbor_constraint_mode, value=2, font=("Arial", 9))
         self.radio_all.pack(anchor=tk.W)
         
-        # ---- Кнопки действий (верхний ряд) ----
-        # ---- Кнопка оптимизации ----
+        # ---- Кнопки действий ----
         btn_frame = tk.Frame(left_pane)
-        left_pane.add(btn_frame, height=35)
+        left_pane.add(btn_frame, height=70)   # достаточно для двух кнопок
         self.optimize_btn = tk.Button(btn_frame, text=i18n.get('optimize_btn'), command=self.optimize_coverage,
                                       font=("Arial", 10, "bold"), bg="#90EE90")
         self.optimize_btn.pack(fill=tk.X)
-
-        # ---- Кнопка ручной проверки ----
         self.manual_btn = tk.Button(btn_frame, text=i18n.get('check_coverage_btn'), command=self.manual_check_coverage,
                                     font=("Arial", 10, "bold"), bg="#FFD700")
         self.manual_btn.pack(fill=tk.X, pady=(2,0))
@@ -160,22 +156,19 @@ class GraphApp:
         self.canvas = FigureCanvasTkAgg(self.fig, master=right_frame)
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         
-        # Добавляем стандартную панель инструментов matplotlib
         self.toolbar = NavigationToolbar2Tk(self.canvas, right_frame)
         self.toolbar.update()
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         
-        # Привязка событий
-        self.text_area.bind("<KeyRelease>", self.on_key_release)
-        for widget in (self.text_area, self.names_area, self.mandatory_text, self.preferred_text, self.purple_text, self.group_text):
-            widget.bind('<Control-a>', self.select_all)
-            widget.bind('<Control-A>', self.select_all)
-            widget.bind('<Control-c>', self.copy_text)
-            widget.bind('<Control-C>', self.copy_text)
-            widget.bind('<Control-v>', self.paste_text)
-            widget.bind('<Control-V>', self.paste_text)
+        # Привязка событий для всех текстовых полей (горячие клавиши)
+        for widget in (self.text_area, self.names_area, self.mandatory_text, 
+                       self.preferred_text, self.purple_text, self.group_text, self.result_text):
+            widget.bind("<Control-KeyPress>", self.keypress)
         
-        # Кастомное перетаскивание узлов левой кнопкой (поверх тулбара)
+        # Привязка автообновления
+        self.text_area.bind("<KeyRelease>", self.on_key_release)
+        
+        # Кастомное перетаскивание узлов
         self.canvas.mpl_connect('pick_event', self.on_pick)
         self.canvas.mpl_connect('button_release_event', self.on_release)
         self.canvas.mpl_connect('motion_notify_event', self.on_motion)
@@ -184,6 +177,17 @@ class GraphApp:
         self.apply_configuration()
         self.update_ui_language()
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def keypress(self, e):
+        # Обработчик комбинаций клавиш для вставки, копирования и вырезания
+        if e.keycode == 86 and e.keysym != 'v':
+            self.paste_text(e)
+        elif e.keycode == 67 and e.keysym != 'c':
+            self.copy_text(e)
+        elif e.keycode == 65 and e.keysym != 'a':
+            self.select_all(e)
+        elif e.keycode == 88 and e.keysym != 'x':
+            self.cut_text(e)
     
     # ------------------ Методы локализации ------------------
     def update_ui_language(self):
@@ -253,6 +257,7 @@ class GraphApp:
         self.purple_text.insert(tk.END, "770\n358")
         self.group_text.insert(tk.END, "Falsemire: 762,761,759 : 1\n")
     
+    # --- Горячие клавиши (исправлено) ---
     def select_all(self, event):
         event.widget.tag_add('sel', '1.0', 'end')
         return 'break'
@@ -271,6 +276,16 @@ class GraphApp:
             text = event.widget.clipboard_get()
             event.widget.insert(tk.INSERT, text)
         except:
+            pass
+        return 'break'
+    
+    def cut_text(self, event):
+        try:
+            selected = event.widget.get('sel.first', 'sel.last')
+            event.widget.clipboard_clear()
+            event.widget.clipboard_append(selected)
+            event.widget.delete('sel.first', 'sel.last')
+        except tk.TclError:
             pass
         return 'break'
     
@@ -429,9 +444,8 @@ class GraphApp:
         
         self.canvas.draw()
     
-    # ------------------ Перетаскивание узлов (только левая кнопка) ------------------
+    # ------------------ Перетаскивание узлов ------------------
     def on_pick(self, event):
-        # Проверяем, что это левая кнопка и мыши внутри графика
         if event.mouseevent.button == 1 and event.artist == self.node_artist and len(event.ind) > 0:
             node_list = list(self.current_G.nodes())
             self.dragging_node = node_list[event.ind[0]]
@@ -513,9 +527,20 @@ class GraphApp:
             self.draw_graph(adj)
         messagebox.showinfo(i18n.get('reset_done'), i18n.get('reset_done'))
     
-    # ------------------ Оптимизация покрытия с помощью PuLP ------------------
+    # ------------------ Оптимизация покрытия ------------------
     def parse_vertex_list_flexible(self, text):
-        """Разбирает текст, который может содержать вершины через запятую, пробел или новую строку."""
+        """Разбирает текст, удаляя комментарии (# ...) и извлекая вершины."""
+        # Удаляем всё, что идёт после # в каждой строке
+        lines = text.split('\n')
+        cleaned_lines = []
+        for line in lines:
+            # Находим позицию первого #
+            pos = line.find('#')
+            if pos != -1:
+                line = line[:pos]
+            cleaned_lines.append(line)
+        text = ' '.join(cleaned_lines)
+        # Заменяем запятые на пробелы и разбиваем
         text = text.replace(',', ' ')
         tokens = text.split()
         vertices = set()
@@ -523,15 +548,6 @@ class GraphApp:
             t = t.strip()
             if t and not t.startswith('#'):
                 vertices.add(t)
-        return vertices
-
-    def parse_vertex_list(self, text_widget):
-        text = text_widget.get("1.0", tk.END).strip()
-        vertices = set()
-        for line in text.split('\n'):
-            line = line.strip()
-            if line and not line.startswith('#'):
-                vertices.add(line)
         return vertices
     
     def parse_group_constraints(self, text):
@@ -714,12 +730,10 @@ class GraphApp:
         all_vertices = set(str(v) for v in self.current_G.nodes())
         neighbors = {v: set(str(n) for n in self.current_G.neighbors(v)) for v in all_vertices}
 
-        # Существование вершин
         missing = forts - all_vertices
         if missing:
             errors.append(i18n.get('error_missing_vertices', vertices=", ".join(sorted(missing))))
 
-        # Покрытие
         covered = set()
         for f in forts:
             if f in all_vertices:
@@ -729,13 +743,11 @@ class GraphApp:
         if uncovered:
             errors.append(i18n.get('error_not_covered', vertices=", ".join(sorted(uncovered))))
 
-        # Обязательные вершины
         mandatory = self.parse_vertex_list_flexible(self.mandatory_text.get("1.0", tk.END))
         missing_mandatory = mandatory - forts
         if missing_mandatory:
             errors.append(f"Не установлены обязательные крепости: {', '.join(sorted(missing_mandatory))}")
 
-        # Групповые ограничения
         group_constraints = self.parse_group_constraints(self.group_text.get("1.0", tk.END))
         for name, vertices, min_cnt in group_constraints:
             selected = forts.intersection(vertices)
@@ -743,7 +755,6 @@ class GraphApp:
                 needed = vertices - forts
                 errors.append(i18n.get('error_group_not_satisfied', name=name, required=min_cnt, selected=len(selected), needed_vertices=", ".join(sorted(needed))))
 
-        # Соседние ограничения
         mode = self.neighbor_constraint_mode.get()
         if mode != 2:
             purple = self.parse_vertex_list_flexible(self.purple_text.get("1.0", tk.END))
